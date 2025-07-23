@@ -42,6 +42,29 @@ class WebcamDetector:
             colors.append(color)
         return colors
     
+    def make_square_with_padding(self, image):
+        """Add black padding to make image square while preserving aspect ratio."""
+        h, w = image.shape[:2]
+        
+        if h == w:
+            return image
+            
+        # Determine padding needed
+        if h > w:
+            # Image is taller - add padding to sides
+            diff = h - w
+            left = diff // 2
+            right = diff - left
+            padded = cv2.copyMakeBorder(image, 0, 0, left, right, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+        else:
+            # Image is wider - add padding to top/bottom
+            diff = w - h
+            top = diff // 2
+            bottom = diff - top
+            padded = cv2.copyMakeBorder(image, top, bottom, 0, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+            
+        return padded
+    
     def draw_detections(self, image, results):
         """Draw bounding boxes and labels on image."""
         for r in results:
@@ -115,11 +138,18 @@ class WebcamDetector:
                 print("[ERROR] Can't receive frame")
                 break
             
-            # Run detection
-            results = self.model(frame, conf=self.conf_threshold)
+            # Make frame square with padding
+            square_frame = self.make_square_with_padding(frame)
             
-            # Draw detections
-            frame = self.draw_detections(frame, results)
+            # Run detection on square frame
+            results = self.model(square_frame, conf=self.conf_threshold)
+            
+            # Draw detections on square frame
+            square_frame = self.draw_detections(square_frame, results)
+            
+            # Remove padding for display (optional - or keep square)
+            # If you want to show original aspect ratio, uncomment next line:
+            # frame = self.remove_padding(square_frame, frame.shape[:2])
             
             # Calculate FPS
             fps_counter += 1
@@ -134,7 +164,7 @@ class WebcamDetector:
                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             
             # Show frame
-            cv2.imshow('YOLOv8 Webcam Detection', frame)
+            cv2.imshow('YOLOv8 Webcam Detection', square_frame)
             
             # Handle key press
             key = cv2.waitKey(1) & 0xFF
@@ -144,7 +174,7 @@ class WebcamDetector:
                 # Save screenshot
                 timestamp = time.strftime("%Y%m%d_%H%M%S")
                 filename = f"detection_{timestamp}.jpg"
-                cv2.imwrite(filename, frame)
+                cv2.imwrite(filename, square_frame)
                 print(f"[INFO] Screenshot saved: {filename}")
         
         # Cleanup
