@@ -207,7 +207,7 @@ marimo/_lsp/
 __marimo__/
 
 # Dataset folders
-yolo_dataset/
+yolo_dataset*
 datasets/
 data/
 *.jpg
@@ -218,3 +218,4 @@ data/
 runs/
 *.pt
 *.onnx
+
