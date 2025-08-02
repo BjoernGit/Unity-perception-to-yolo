@@ -1,5 +1,5 @@
 """
-YOLOv8 Training GUI
+YOLO11 Training GUI
 Interactive interface for training YOLO models with Unity Perception data
 """
 
@@ -14,10 +14,10 @@ import yaml
 import time
 
 
-class YOLOTrainingGUI:
+class YOLO11TrainingGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("YOLOv8 Training GUI")
+        self.root.title("YOLO11 Training GUI")
         self.root.geometry("800x900")
         
         # Training process
@@ -37,7 +37,7 @@ class YOLOTrainingGUI:
         
         # Model settings  
         self.model_size = tk.StringVar(value="m")
-        self.pretrained_model = tk.StringVar(value="")  # Empty = use default yolov8{size}.pt
+        self.pretrained_model = tk.StringVar(value="")  # Empty = use default yolo11{size}.pt
         
         # Training parameters
         self.epochs = tk.IntVar(value=100)
@@ -176,13 +176,13 @@ class YOLOTrainingGUI:
                                   values=["n", "s", "m", "l", "x"], state="readonly", width=10)
         model_combo.grid(row=0, column=1, padx=(5, 0), sticky=tk.W)
         
-        # Model size info
+        # Model size info (updated for YOLO11)
         size_info = {
-            "n": "Nano (3.2M params) - Fastest",
-            "s": "Small (11.2M params) - Fast", 
-            "m": "Medium (25.9M params) - Balanced",
-            "l": "Large (43.7M params) - Accurate",
-            "x": "XLarge (68.2M params) - Most Accurate"
+            "n": "Nano (2.6M params) - Fastest",
+            "s": "Small (9.4M params) - Fast", 
+            "m": "Medium (20.1M params) - Balanced",
+            "l": "Large (25.3M params) - Accurate",
+            "x": "XLarge (56.9M params) - Most Accurate"
         }
         
         self.model_info = ttk.Label(model_frame, text=size_info[self.model_size.get()])
@@ -912,11 +912,11 @@ class YOLOTrainingGUI:
     def update_model_info(self, event=None):
         """Update model size information."""
         size_info = {
-            "n": "Nano (3.2M params) - Fastest",
-            "s": "Small (11.2M params) - Fast", 
-            "m": "Medium (25.9M params) - Balanced",
-            "l": "Large (43.7M params) - Accurate",
-            "x": "XLarge (68.2M params) - Most Accurate"
+            "n": "Nano (2.6M params) - Fastest",
+            "s": "Small (9.4M params) - Fast", 
+            "m": "Medium (20.1M params) - Balanced",
+            "l": "Large (25.3M params) - Accurate",
+            "x": "XLarge (56.9M params) - Most Accurate"
         }
         self.model_info.config(text=size_info.get(self.model_size.get(), "Unknown"))
         self.update_command_preview()
@@ -945,7 +945,7 @@ class YOLOTrainingGUI:
             if self.pretrained_model.get().strip():
                 model_path = self.pretrained_model.get()
             else:
-                model_path = f"yolov8{self.model_size.get()}.pt"
+                model_path = f"yolo11{self.model_size.get()}.pt"
             
             # Build command
             cmd_parts = [
@@ -1108,7 +1108,7 @@ def main():
     style = ttk.Style()
     style.configure("Success.TButton", foreground="green")
     
-    app = YOLOTrainingGUI(root)
+    app = YOLO11TrainingGUI(root)
     root.mainloop()
 
 

@@ -1,5 +1,5 @@
 """
-Enhanced YOLOv8 Training Script for Unity Perception Data with GUI Support
+Enhanced YOLO11 Training Script for Unity Perception Data with GUI Support
 """
 
 from ultralytics import YOLO
@@ -236,7 +236,7 @@ def train_yolo_model(
     batch_viewer=False
 ):
     """
-    Train YOLOv8 model with enhanced augmentation support.
+    Train YOLO11 model with enhanced augmentation support.
     """
     
     # Auto-detect device if not specified
@@ -249,7 +249,7 @@ def train_yolo_model(
         print(f"[INFO] GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
     
     # Load pretrained model
-    model_name = f'yolov8{model_size}.pt'
+    model_name = f'yolo11{model_size}.pt'
     print(f"[INFO] Loading pretrained model: {model_name}")
     model = YOLO(model_name)
     
@@ -418,7 +418,7 @@ def main():
     """Main training pipeline with enhanced GUI support."""
     import argparse
     
-    parser = argparse.ArgumentParser(description="Enhanced YOLOv8 Training with Custom Augmentations")
+    parser = argparse.ArgumentParser(description="Enhanced YOLO11 Training with Custom Augmentations")
     
     # Basic parameters
     parser.add_argument("--dataset", default="./yolo_dataset", help="Path to dataset")
